@@ -7,6 +7,8 @@ import sys
 import json #to handle json compatability
 import os
 import webbrowser as wb #to open web browser of searches
+from amadeus import Client, ResponseError #AMADEUS DEVELOPER API
+from  geopy.geocoders import Nominatim #GeoPy and Nominatim to retrieve lat & long of city
 
 
 engine = pyttsx3.init()
@@ -173,6 +175,22 @@ def visa():
     print("Results : Official details related to registeration of Visa is available on the official website of Indian Govenrnment that is indianvisaonline.gov.in. You should not trust any other source or application.")
 
 
+def activity():
+    speak("Please tell the City for which you want to explore the activities?")
+    placename = userquery().lower()
+    geolocator = Nominatim(user_agent="jainayush362@gmail.com")
+    city = placename
+    country ="India"
+    loca = geolocator.geocode(city+','+ country)
+
+    amadeus = Client(client_id='Aq3qAwphK1SyDHjYnlABOc12OO2AHG82',client_secret='6h5fmOnNwCSSHfAd')
+    try:
+        #response = amadeus.shopping.activities.get(latitude=loca.latitude, longitude=loca.longitude)
+        response = amadeus.reference_data.locations.points_of_interest.get(latitude=loca.latitude, longitude=loca.longitude)
+        speak("Following are the Activities for given location"+placename)
+        print(response.data)
+    except ResponseError as error:
+        print(error)
 
 
 if __name__ == '__main__':
@@ -192,5 +210,7 @@ if __name__ == '__main__':
         itenary()
     elif 'how far india' in query or 'distance to india' in query or "how to reach india" in query:
         visit_india()
+    elif 'activities' in query or 'activity' in query:
+        activity()
     else:
         speak("I don't have much information on this. Please try something else.")
