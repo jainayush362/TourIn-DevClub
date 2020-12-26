@@ -240,6 +240,36 @@ def distance_calc():
         speak("Not have much information")
         print("Result : No data found")
         
+def duration_calc():
+    #DISTANCEMATRIX API
+    speak("Tell me the name of your current city")
+   
+    geolocator = Nominatim(user_agent="jainayush362@gmail.com")
+    cur_city = userquery().lower()
+    loc_cur_city = geolocator.geocode(cur_city)
+
+    speak("Now tell me the name of destination city")
+    des_city = userquery().lower()
+    loc_des_city = geolocator.geocode(des_city)
+
+    api_key = "TG5q5VdV4PUNEO2fpfzw4uxHwhpc6"
+    base_url = "https://api.distancematrix.ai/maps/api/distancematrix/json?"
+    complete_url = base_url + "origins=" + str(loc_cur_city.latitude) + "," + str(loc_cur_city.longitude) + "&destinations=" + str(loc_des_city.latitude) + "," + str(loc_des_city.longitude) + "&departure_time=now" + "&key=" + api_key
+    response = requests.get(complete_url)
+    xd = response.json()
+
+    if xd["status"]=="OK":
+        yd = xd["rows"]
+        ed = yd[0]["elements"]
+        dd = ed[0]["duration"]
+        dura_text = dd["text"]
+        speak("The duration for given journey is")
+        speak(dura_text)
+        print("Results : The duration for given journey is : "+dura_text)
+    else:
+        speak("Not have much information")
+        print("Result : No data found")
+        
 
 if __name__ == '__main__':
     wishme()
@@ -264,5 +294,7 @@ if __name__ == '__main__':
         places_data()
     elif 'distance' in query:
         distance_calc()
+    elif 'duration' in query:
+        duration_calc()
     else:
         speak("I don't have much information on this. Please try something else.")
