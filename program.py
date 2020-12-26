@@ -162,6 +162,18 @@ def points_of_attr():
 def itenary():
     wb.open_new("https://www.makemytrip.com/")
 
+def airports():
+    wb.open_new("https://www.aai.aero/en/content/how-many-international-airports-are-india-and-which-are-they")
+    speak("The given are the official international airpotrs in india till date as per airports authority of india.")
+
+
+def visa():
+    speak("Official details related to registeration of Visa is available on the official website of Indian Govenrnment that is indianvisaonline.gov.in. You should not trust any other source or application.")
+    wb.open_new("https://indianvisaonline.gov.in/")
+    print("Results : Official details related to registeration of Visa is available on the official website of Indian Govenrnment that is indianvisaonline.gov.in. You should not trust any other source or application.")
+
+
+
 
 if __name__ == '__main__':
     wishme()
@@ -170,6 +182,10 @@ if __name__ == '__main__':
         climate()
     elif 'why to visit india' in query or 'about india' in query or 'why should i visit india' in query or 'information on india' in query or 'what is india' in query:
         about_india()
+    elif 'visa' in query:
+        visa()
+    elif 'airport' in query or 'airports' in query:
+        airports()
     elif 'point of attraction' in query or 'points of attraction' in query or 'tourist attractions' in query or "tourist spots" in query or "monuments" in query or "attraction spots" in query or 'places of interests' in query:
         points_of_attr()
     elif 'itinerary' in query or 'booking' in query:
