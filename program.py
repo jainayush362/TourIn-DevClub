@@ -15,25 +15,25 @@ engine = pyttsx3.init()
 rate = engine.getProperty('rate')
 
 def speak(audio):
-engine.say(audio)
-engine.runAndWait()
+    engine.say(audio)
+    engine.runAndWait()
 
 def userquery():
-rec = sr.Recognizer()
-with sr.Microphone() as source:
-rec.pause_threshold = 1
-print("Listening......")
-audio = rec.listen(source)
+    rec = sr.Recognizer()
+    with sr.Microphone() as source:
+    rec.pause_threshold = 1
+    print("Listening......")
+    audio = rec.listen(source)
 
-try:
-print("Recognizing......")
-recquery = rec.recognize_google(audio, language='en-US,en-IN')
-print("You: ", recquery)
-except Exception as e:
-# print(e)
-print("Say that again please.....")
-return "None"
-return recquery
+    try:
+        print("Recognizing......")
+        recquery = rec.recognize_google(audio, language='en-US,en-IN')
+        print("You: ", recquery)
+    except Exception as e:
+        # print(e)
+        print("Say that again please.....")
+        return "None"
+    return recquery
 
 def timepredict():
     time = datetime.datetime.now().strftime("%H:%M:%S")
@@ -210,7 +210,36 @@ def places_data():
     print("Results : During Autumn season you must visit to Kashmir, Kerala, Mysore, Gujarat, Uttarakhand , Kolkata, Darjeeling, Pushkar, Ladakh to see the dazzling fall colour.")
 
 
+def distance_calc():
+    #DISTANCEMATRIX API
+    speak("Tell me the name of your current city")
+    
+    geolocator = Nominatim(user_agent="jainayush362@gmail.com")
+    cur_city_dist = userquery().lower()
+    loc_cur_city_dist = geolocator.geocode(cur_city_dist)
 
+    speak("Now tell me the name of destination city")
+    des_city_dist = userquery().lower()
+    loc_des_city_dist = geolocator.geocode(des_city_dist)
+
+    api_key = "TG5q5VdV4PUNEO2fpfzw4uxHwhpc6"
+    base_url = "https://api.distancematrix.ai/maps/api/distancematrix/json?"
+    complete_url = base_url + "origins=" + str(loc_cur_city_dist.latitude) + "," + str(loc_cur_city_dist.longitude) + "&destinations=" + str(loc_des_city_dist.latitude) + "," + str(loc_des_city_dist.longitude) + "&departure_time=now" + "&key=" + api_key
+    response = requests.get(complete_url)
+    xdis = response.json()
+
+    if xdis["status"]=="OK":
+        ydis = xdis["rows"]
+        edis = ydis[0]["elements"]
+        ddis = edis[0]["distance"]
+        dis_text = ddis["text"]
+        speak("The distance for given journey is")
+        speak(dis_text)
+        print("Results : The distance for given journey is : "+dis_text)
+    else:
+        speak("Not have much information")
+        print("Result : No data found")
+        
 
 if __name__ == '__main__':
     wishme()
@@ -233,5 +262,7 @@ if __name__ == '__main__':
         activity()
     elif 'states' in query or 'places to visit' in query or 'places i should' in query or 'places should i' in query or 'must visit places' in query or 'tourist destinations' in query or 'which places' in query:
         places_data()
+    elif 'distance' in query:
+        distance_calc()
     else:
         speak("I don't have much information on this. Please try something else.")
