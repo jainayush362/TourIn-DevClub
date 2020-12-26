@@ -22,21 +22,12 @@ class Application(tk.Frame):
 
     def create_widgets(self):
         self.loadimage = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\pro\\rounded.png")
-        self.hi_there = tk.Button(self, image=self.loadimage)
-        # self.hi_there["command"] = self.start_it
-        self.hi_there["border"] = "0"
-        self.hi_there.pack(side="left")
-
-        self.hi1_there = tk.Button(self, image=self.loadimage)
-        # self.hi1_there["command"] = self.start_it
-        self.hi1_there["border"] = "0"
-        self.hi1_there.pack(side="left")
-
-        self.hi2_there = tk.Button(self, image=self.loadimage)
-        # self.hi1_there["command"] = self.start_it
-        self.hi2_there["border"] = "0"
-        self.hi2_there.pack(side="left")
-
+        for i in range(3):
+            for j in range(3):
+                self.hi_there = tk.Button(self, image=self.loadimage, height=200, width=200)
+                # self.hi_there["command"] = self.start_it
+                self.hi_there["border"] = "0"
+                self.hi_there.grid(row=i, column=j, padx=1,pady=1)
 
         # self.quit = tk.Button(self, text="QUIT", fg="red",
         #                       command=self.master.destroy)
