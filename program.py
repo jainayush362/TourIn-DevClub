@@ -6,6 +6,7 @@ import requests
 import sys
 import json #to handle json compatability
 import os
+import webbrowser as wb #to open web browser of searches
 
 
 engine = pyttsx3.init()
@@ -141,7 +142,15 @@ def about_india():
     speak("India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
     print("Results : India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
 
+	
+def points_of_attr():
+    speak("Just tell me the name of Indian city,village,town,state or district in which you want to see points of attraction.")
+    place = userquery().lower()
+    wb.open_new("https://www.google.com/search?sclient=psy-ab&site=&source=hp&btnG=Search&q="+place+"+point+of+interest") #Search filtering technique using Google as example
 
+
+def itenary():
+    wb.open_new("https://www.makemytrip.com/")
 
 
 if __name__ == '__main__':
@@ -151,5 +160,9 @@ if __name__ == '__main__':
         climate()
     elif 'why to visit india' in query or 'about india' in query or 'why should i visit india' in query or 'information on india' in query or 'what is india' in query:
         about_india()
+    elif 'point of attraction' in query or 'points of attraction' in query or 'tourist attractions' in query or "tourist spots" in query or "monuments" in query or "attraction spots" in query or 'places of interests' in query:
+        points_of_attr()
+    elif 'itinerary' in query or 'booking' in query:
+        itenary()
     else:
         speak("I don't have much information on this. Please try something else.")
