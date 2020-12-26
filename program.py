@@ -9,10 +9,10 @@ from amadeus import Client, ResponseError #AMADEUS DEVELOPER API
 from  geopy.geocoders import Nominatim #GeoPy and Nominatim to retrieve lat & long of city
 import os
 import webbrowser as wb #to open web browser of searches
+#API's USED IN THE PROJECT : IPSTACK, TEACHABLE MACHIENE, AMADEUS, DISTANCEMATRIX, OPENWEATHERMAP
 
-
-engine = pyttsx3.init()
-rate = engine.getProperty('rate')
+engine = pyttsx3.init() #initiating the text to speech engine
+rate = engine.getProperty('rate') #getting the speech word rate per minute
 
 def speak(audio):
     engine.say(audio)
@@ -34,45 +34,6 @@ def userquery():
         print("Say that again please.....")
         return "None"
     return recquery
-
-def timepredict():
-    time = datetime.datetime.now().strftime("%H:%M:%S")
-    speak("The Current time is")
-    speak(time)
-
-def datepredict():
-    day = datetime.datetime.now().day
-    month = datetime.datetime.now().month
-    year = datetime.datetime.now().year
-    speak("Today is")
-    speak(day)
-    speak(month)
-    speak(year)
-
-def greet():
-    hour = datetime.datetime.now().hour
-    if hour>=6 and hour<12:
-        speak("Good Morning")
-    elif hour>=12 and hour<18:
-        speak("Good Afternoon")
-    elif hour>=17 and hour<19:
-        speak("Good Evening")
-    else:
-        speak("Good Night")
-
-def wishme():
-    print("*******WELCOME TO Indian Tourism Assistant*********")
-    speak("Namaste, Welcome to TourIN, Indian Tourism Assistant")
-    speak("May I know your name")
-    name=userquery()
-    speak("Hello")
-    speak(name)
-    timepredict()
-    datepredict()
-    greet()
-    speak("TourIN at your service")
-    speak("How may I help you today")
-
 
 def climate():
     #OPENWEATHERMAP API
@@ -139,16 +100,6 @@ def climate():
     else:
         speak("You can check again to get updated condition.")
 
-def visit_india():
-    send_url = "http://api.ipstack.com/check?access_key=0fbd1f7d2671232974fce0727cea581a" #IPStack API
-    geo_req = requests.get(send_url)
-    geo_json = json.loads(geo_req.text)
-    origincity = geo_json['city']
-    origincountry = geo_json['country_name']
-    destinationcountry="india"
-    wb.open_new("https://www.google.co.in/maps/dir/"+origincity+", +"+origincountry+"/"+destinationcountry+"/") #Search Filtering Technique using Google as example
-    speak("Here on the map you can find out the time and preffered mode of commute for your journey.")
-
 
 def about_india():
     speak("India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
@@ -190,6 +141,10 @@ def activity():
         print(response.data)
     except ResponseError as error:
         print(error)
+
+def identify():
+    wb.open_new("C:\\Users\\Ayush\\Desktop\\pro\\index.html") #External HTML page opening to detect images using webcam
+    speak("Please face the camera towards the monument to start identifying.")
 
 def places_data():
     month = datetime.datetime.now().month
@@ -272,12 +227,13 @@ def duration_calc():
         
 
 if __name__ == '__main__':
-    wishme()
     query = userquery().lower() #storing all commands in lower case for easy recognition
     if 'climate' in query or 'season' in query or 'weather' in query or 'forecast' in query:
         climate()
     elif 'why to visit india' in query or 'about india' in query or 'why should i visit india' in query or 'information on india' in query or 'what is india' in query:
         about_india()
+    elif 'identify' in query or 'tell the name of this' in query or 'what is this' in query or 'identifying' in query:
+        identify()
     elif 'visa' in query:
         visa()
     elif 'airport' in query or 'airports' in query:
@@ -286,8 +242,6 @@ if __name__ == '__main__':
         points_of_attr()
     elif 'itinerary' in query or 'booking' in query:
         itenary()
-    elif 'how far india' in query or 'distance to india' in query or "how to reach india" in query:
-        visit_india()
     elif 'activities' in query or 'activity' in query:
         activity()
     elif 'states' in query or 'places to visit' in query or 'places i should' in query or 'places should i' in query or 'must visit places' in query or 'tourist destinations' in query or 'which places' in query:
