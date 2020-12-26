@@ -137,7 +137,17 @@ def climate():
     else:
         speak("You can check again to get updated condition.")
 	
+def visit_india():
+    send_url = "http://api.ipstack.com/check?access_key=0fbd1f7d2671232974fce0727cea581a" #IPStack API
+    geo_req = requests.get(send_url)
+    geo_json = json.loads(geo_req.text)
+    origincity = geo_json['city']
+    origincountry = geo_json['country_name']
+    destinationcountry="india"
+    wb.open_new("https://www.google.co.in/maps/dir/"+origincity+", +"+origincountry+"/"+destinationcountry+"/") #Search Filtering Technique using Google as example
+    speak("Here on the map you can find out the time and preffered mode of commute for your journey.")
 	
+
 def about_india():
     speak("India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
     print("Results : India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
@@ -164,5 +174,7 @@ if __name__ == '__main__':
         points_of_attr()
     elif 'itinerary' in query or 'booking' in query:
         itenary()
+    elif 'how far india' in query or 'distance to india' in query or "how to reach india" in query:
+        visit_india()
     else:
         speak("I don't have much information on this. Please try something else.")
