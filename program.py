@@ -10,7 +10,6 @@ import os
 
 engine = pyttsx3.init()
 rate = engine.getProperty('rate')
-engine.setProperty('rate', rate-50)
 
 def speak(audio):
 	engine.say(audio)
@@ -136,14 +135,21 @@ def climate():
             print("Result : City Not Found")
     else:
         speak("You can check again to get updated condition.")
+	
+	
+def about_india():
+    speak("India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
+    print("Results : India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
 
 
 
 
 if __name__ == '__main__':
-    	wishme()
-	query = userquery().lower() #storing all commands in lower case for easy recognition
-        if 'climate' in query or 'season' in query or 'weather' in query or 'forecast' in query:
-            climate()
-	else:
-            speak("I don't have much information on this. Please try something else.")
+    wishme()
+    query = userquery().lower() #storing all commands in lower case for easy recognition
+    if 'climate' in query or 'season' in query or 'weather' in query or 'forecast' in query:
+        climate()
+    elif 'why to visit india' in query or 'about india' in query or 'why should i visit india' in query or 'information on india' in query or 'what is india' in query:
+        about_india()
+    else:
+        speak("I don't have much information on this. Please try something else.")
