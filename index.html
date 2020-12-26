@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Identify The Monument</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-XGFPD1H74S');
+	</script>
+
+</head>
+<body>
+	<center>
+	<h1>Click on START to recognize the Monument</h1>
+	<div id="webcam-container"></div>
+	<button type="button" onclick="init()">Start</button>
+	<div id="label-container"></div>
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+	<script type="text/javascript">
+    // the link to model provided by Teachable Machine export panel
+    const URL = "https://teachablemachine.withgoogle.com/models/VGIVecrwE/";
+    let model, webcam, labelContainer, maxPredictions;
+    async function init() {
+    	const modelURL = URL + "model.json";
+    	const metadataURL = URL + "metadata.json";
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        // Convenience function to setup a webcam
+        const flip = true;
+        webcam = new tmImage.Webcam(350, 450, flip); // width, height, flip
+        await webcam.setup(); // request access to the webcam
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) {
+        	labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+
+    async function loop() {
+        webcam.update();
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+    // run the webcam image through the image model
+    async function predict() {t
+        const prediction = await model.predict(webcam.canvas);
+        for (let i = 0; i < maxPredictions; i++) {
+        	const classPrediction =
+        	prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        	labelContainer.childNodes[i].innerHTML = classPrediction;
+        }
+    }
+	</script>
+	</center>
+</body>
+</html>
