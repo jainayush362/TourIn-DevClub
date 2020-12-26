@@ -5,35 +5,35 @@ import datetime
 import requests
 import sys
 import json #to handle json compatability
-import os
-import webbrowser as wb #to open web browser of searches
 from amadeus import Client, ResponseError #AMADEUS DEVELOPER API
 from  geopy.geocoders import Nominatim #GeoPy and Nominatim to retrieve lat & long of city
+import os
+import webbrowser as wb #to open web browser of searches
 
 
 engine = pyttsx3.init()
 rate = engine.getProperty('rate')
 
 def speak(audio):
-	engine.say(audio)
-	engine.runAndWait()
+engine.say(audio)
+engine.runAndWait()
 
 def userquery():
-	rec = sr.Recognizer()
-	with sr.Microphone() as source:
-		rec.pause_threshold = 1
-		print("Listening......")
-		audio = rec.listen(source)
+rec = sr.Recognizer()
+with sr.Microphone() as source:
+rec.pause_threshold = 1
+print("Listening......")
+audio = rec.listen(source)
 
-	try:
-		print("Recognizing......")
-		recquery = rec.recognize_google(audio, language='en-US,en-IN')
-		print("You: ", recquery)
-	except Exception as e:
-		# print(e)
-		print("Say that again please.....")
-		return "None"
-	return recquery
+try:
+print("Recognizing......")
+recquery = rec.recognize_google(audio, language='en-US,en-IN')
+print("You: ", recquery)
+except Exception as e:
+# print(e)
+print("Say that again please.....")
+return "None"
+return recquery
 
 def timepredict():
     time = datetime.datetime.now().strftime("%H:%M:%S")
@@ -81,13 +81,13 @@ def climate():
     city_name = "india"
     complete_url = base_url + "appid=" + api_key + "&q=" + city_name + "&units=metric"
     response = requests.get(complete_url)
-    x = response.json() 
+    x = response.json()
 
-    if x["cod"] != "404": 
-        y = x["main"] 
-        current_temperature = y["temp"] 
-        current_pressure = y["pressure"] 
-        current_humidiy = y["humidity"] 
+    if x["cod"] != "404":
+        y = x["main"]
+        current_temperature = y["temp"]
+        current_pressure = y["pressure"]
+        current_humidiy = y["humidity"]
         z = x["weather"]  
         weather_description = z[0]["description"]
         speak("Temperature in Celcius unit is")
@@ -95,13 +95,13 @@ def climate():
         speak("Overall description of weather is")
         speak(weather_description)
         print(" Temperature (in Celcius unit) = " +
-                        str(current_temperature) + 
+                        str(current_temperature) +
             "\n Atmospheric pressure (in hPa unit) = " +
                         str(current_pressure) +
             "\n Humidity (in percentage) = " +
                         str(current_humidiy) +
             "\n Description = " +
-                        str(weather_description))   
+                        str(weather_description))  
     else:
         speak("Not have any updated data!")
 
@@ -112,13 +112,13 @@ def climate():
         city_name = userquery().lower()
         complete_url = base_url + "appid=" + api_key + "&q=" + city_name + "&units=metric"
         response = requests.get(complete_url)
-        x = response.json() 
+        x = response.json()
 
-        if x["cod"] != "404": 
-            y = x["main"] 
-            current_temperature = y["temp"] 
-            current_pressure = y["pressure"] 
-            current_humidiy = y["humidity"] 
+        if x["cod"] != "404":
+            y = x["main"]
+            current_temperature = y["temp"]
+            current_pressure = y["pressure"]
+            current_humidiy = y["humidity"]
             z = x["weather"]  
             weather_description = z[0]["description"]
             speak("Temperature in Celcius unit is")
@@ -126,19 +126,19 @@ def climate():
             speak("Overall description of weather is")
             speak(weather_description)
             print("Results : Temperature (in Celcius unit) = " +
-                            str(current_temperature) + 
+                            str(current_temperature) +
                 "\n Atmospheric pressure (in hPa unit) = " +
                             str(current_pressure) +
                 "\n Humidity (in percentage) = " +
                             str(current_humidiy) +
                 "\n Description = " +
-                            str(weather_description))   
+                            str(weather_description))  
         else:
             speak("Not have any updated data!")
             print("Result : City Not Found")
     else:
         speak("You can check again to get updated condition.")
-	
+
 def visit_india():
     send_url = "http://api.ipstack.com/check?access_key=0fbd1f7d2671232974fce0727cea581a" #IPStack API
     geo_req = requests.get(send_url)
@@ -148,13 +148,13 @@ def visit_india():
     destinationcountry="india"
     wb.open_new("https://www.google.co.in/maps/dir/"+origincity+", +"+origincountry+"/"+destinationcountry+"/") #Search Filtering Technique using Google as example
     speak("Here on the map you can find out the time and preffered mode of commute for your journey.")
-	
+
 
 def about_india():
     speak("India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
     print("Results : India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
 
-	
+
 def points_of_attr():
     speak("Just tell me the name of Indian city,village,town,state or district in which you want to see points of attraction.")
     place = userquery().lower()
@@ -174,7 +174,6 @@ def visa():
     wb.open_new("https://indianvisaonline.gov.in/")
     print("Results : Official details related to registeration of Visa is available on the official website of Indian Govenrnment that is indianvisaonline.gov.in. You should not trust any other source or application.")
 
-
 def activity():
     speak("Please tell the City for which you want to explore the activities?")
     placename = userquery().lower()
@@ -185,12 +184,32 @@ def activity():
 
     amadeus = Client(client_id='Aq3qAwphK1SyDHjYnlABOc12OO2AHG82',client_secret='6h5fmOnNwCSSHfAd')
     try:
-        #response = amadeus.shopping.activities.get(latitude=loca.latitude, longitude=loca.longitude)
-        response = amadeus.reference_data.locations.points_of_interest.get(latitude=loca.latitude, longitude=loca.longitude)
+        response = amadeus.shopping.activities.get(latitude=loca.latitude, longitude=loca.longitude)
         speak("Following are the Activities for given location"+placename)
+        tkinter.messagebox.showinfo('Result for Query',response.data)
         print(response.data)
     except ResponseError as error:
         print(error)
+
+def places_data():
+    month = datetime.datetime.now().month
+    if month in [12, 1]:
+        speak("During winter season it is best to visit Kerala, Chennai, Jaipur, Udaipur, Jodhpur, Karnataka, Uttarakhand, Gujarat, Maharashtra, Lakshadweep, Goa, Delhi, Kashmir, Mussoorie, Agra, Varanasi, Lucknow")
+        print("Results : During winter season it is best to visit Kerala, Chennai, Jaipur, Udaipur, Jodhpur, Karnataka, Uttarakhand, Gujarat, Maharashtra, Lakshadweep, Goa, Delhi, Kashmir, Mussoorie, Agra, Varanasi, Lucknow")
+    elif month in [2, 3]:
+    speak("During Spring season its best to visit Ooty, Kashmir, Nagaland, Andaman and Nicobar Islands, Kasol, Hampi, Kerela, Goa and Darjeeling.")
+    print("Results : During Spring season its best to visit Ooty, Kashmir, Nagaland, Andaman and Nicobar Islands, Kasol, Hampi, Kerela, Goa and Darjeeling.")
+    elif month in [4, 5, 6]:
+        speak("During summer season it is best to visit Shimla, Manali, Andaman and Nicobar, Darjeeling, Rishikesh, Shilong, Laksdweep, Ooty, Gangtok, Ladakh, Dalhousie, Nanital, Uttrakhand")
+        print("Results : During summer season it is best to visit Shimla, Manali, Andaman and Nicobar, Darjeeling, Rishikesh, Shilong, Laksdweep, Ooty, Gangtok, Ladakh, Dalhousie, Nanital, Uttrakhand")
+    elif month in [7, 8, 9]:
+        speak("During monsoon season it is best to visit Kashmir, Jaisalmer, Pondicherry, Kinnaur, Meghalaya, Jaipur, Gujrat, Mysore, Uttrakhand, Jodhpur, Ladakh, Agra, Varanasi, Lucknow, Delhi")
+        print("Results : During mmonsoon season it is best to visit Kashmir, Jaisalmer, Pondicherry, Kinnaur, Meghalaya, Jaipur, Gujrat, Mysore, Uttrakhand, Jodhpur, Ladakh, Agra, Varanasi, Lucknow, Delhi")
+    else:
+    speak("During Autumn season you must visit to Kashmir, Kerala, Mysore, Gujarat, Uttarakhand , Kolkata, Darjeeling, Pushkar, Ladakh to see the dazzling fall colour.")
+    print("Results : During Autumn season you must visit to Kashmir, Kerala, Mysore, Gujarat, Uttarakhand , Kolkata, Darjeeling, Pushkar, Ladakh to see the dazzling fall colour.")
+
+
 
 
 if __name__ == '__main__':
@@ -212,5 +231,7 @@ if __name__ == '__main__':
         visit_india()
     elif 'activities' in query or 'activity' in query:
         activity()
+    elif 'states' in query or 'places to visit' in query or 'places i should' in query or 'places should i' in query or 'must visit places' in query or 'tourist destinations' in query or 'which places' in query:
+        places_data()
     else:
         speak("I don't have much information on this. Please try something else.")
