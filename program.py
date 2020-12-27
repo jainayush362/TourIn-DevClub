@@ -1,5 +1,4 @@
 import tkinter as tk #FOR GUI Development
-from tkinter import TOP,BOTTOM
 import tkinter.messagebox
 import pyttsx3 #text to speech library
 import datetime #date and time library
@@ -12,9 +11,10 @@ import sys
 import json #to handle json compatability
 from amadeus import Client, ResponseError #AMADEUS DEVELOPER API
 from  geopy.geocoders import Nominatim #GeoPy and Nominatim to retrieve lat & long of city
-from playsound import playsound #to play audio
 import os
 from twilio.rest import Client as cl #making calls/messages API TWILIO
+from geopy.distance import geodesic
+from math import ceil
 
 #API's USED IN THE PROJECT : TWILIO, IPSTACK, TEACHABLE MACHIENE, AMADEUS, DISTANCEMATRIX, OPENWEATHERMAP
 
@@ -63,14 +63,9 @@ def climate():
 		speak(current_temperature)
 		speak("Overall description of weather is")
 		speak(weather_description)
-		print(" Temperature (in Celcius unit) = " +
-						str(current_temperature) + 
-			"\n Atmospheric pressure (in hPa unit) = " +
-						str(current_pressure) +
-			"\n Humidity (in percentage) = " +
-						str(current_humidiy) +
-			"\n Description = " +
-						str(weather_description))   
+		pp= " Temperature of India(in Celcius unit) = " +str(current_temperature) + "Atmospheric pressure (in hPa unit) = " +str(current_pressure) +"Humidity (in percentage) = " +str(current_humidiy) +"Description = " +str(weather_description)
+
+		tkinter.messagebox.showinfo('Weather Forecast',pp)   
 	else:
 		speak("Not have any updated data!")
 
@@ -94,55 +89,35 @@ def climate():
 			speak(current_temperature)
 			speak("Overall description of weather is")
 			speak(weather_description)
-			print("Results : Temperature (in Celcius unit) = " +
-							str(current_temperature) + 
-				"\n Atmospheric pressure (in hPa unit) = " +
-							str(current_pressure) +
-				"\n Humidity (in percentage) = " +
-							str(current_humidiy) +
-				"\n Description = " +
-							str(weather_description))   
+			pp= " Temperature of "+city_name+" (in Celcius unit) = " +str(current_temperature) + "Atmospheric pressure (in hPa unit) = " +str(current_pressure) +"Humidity (in percentage) = " +str(current_humidiy) +"Description = " +str(weather_description)
+			tkinter.messagebox.showinfo('Weather Forecast',pp)   
 		else:
 			speak("Not have any updated data!")
-			print("Result : City Not Found")
+			tkinter.messagebox.showinfo('Weather Forecast',"Result : No data Found")
 	else:
 		speak("You can check again to get updated condition.")
 
 
 def about_india():
 	speak("India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
-	print("Results : India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
-
+	tkinter.messagebox.showinfo('About India',"India, officially the Republic of India, is a country in South Asia. It is the second-most populous country, the seventh-largest country by land area, and the most populous democracy in the world. One of the oldest civilisations in the world, India is a mosaic of multicultural experiences. With a rich heritage and myriad attractions, the country is among the most popular tourist destinations in the world. Shri Ram Nath Kovind is the President of India and Shri Narendra Damodar Das Modi is the present Prime Minister of India.")
 
 def distance_calc():
 	#DISTANCEMATRIX API
 	speak("Tell me the name of your current city")
 	
 	geolocator = Nominatim(user_agent="jainayush362@gmail.com")
-	cur_city_dist = userquery().lower()
-	loc_cur_city_dist = geolocator.geocode(cur_city_dist)
-
+	origincity = userquery().lower()
+	lococity = geolocator.geocode(origincity)
 	speak("Now tell me the name of destination city")
-	des_city_dist = userquery().lower()
-	loc_des_city_dist = geolocator.geocode(des_city_dist)
-
-	api_key = "TG5q5VdV4PUNEO2fpfzw4uxHwhpc6"
-	base_url = "https://api.distancematrix.ai/maps/api/distancematrix/json?"
-	complete_url = base_url + "origins=" + str(loc_cur_city_dist.latitude) + "," + str(loc_cur_city_dist.longitude) + "&destinations=" + str(loc_des_city_dist.latitude) + "," + str(loc_des_city_dist.longitude) + "&departure_time=now" + "&key=" + api_key
-	response = requests.get(complete_url)
-	xdis = response.json()
-
-	if xdis["status"]=="OK":
-		ydis = xdis["rows"]
-		edis = ydis[0]["elements"]
-		ddis = edis[0]["distance"]
-		dis_text = ddis["text"]
-		speak("The distance for given journey is")
-		speak(dis_text)
-		print("Results : The distance for given journey is : "+dis_text)
-	else:
-		speak("Not have much information")
-		print("Result : No data found")
+	destinationcity = userquery().lower()
+	locdcity = geolocator.geocode(destinationcity)
+	ocity = (lococity.latitude, lococity.longitude)
+	dcity = (locdcity.latitude, locdcity.longitude)
+	caldist = ceil(geodesic(ocity, dcity).km)
+	speak("The Calculated Distance in Kilometers is : ")
+	speak(caldist)
+	print("Results : The Calculated Distance is : "+str(caldist)+" Km")
 
 
 def duration_calc():
@@ -151,29 +126,26 @@ def duration_calc():
 	
 	geolocator = Nominatim(user_agent="jainayush362@gmail.com")
 	cur_city = userquery().lower()
-	loc_cur_city = geolocator.geocode(cur_city)
+	loccurcity = geolocator.geocode(cur_city)
 
 	speak("Now tell me the name of destination city")
 	des_city = userquery().lower()
-	loc_des_city = geolocator.geocode(des_city)
-
-	api_key = "TG5q5VdV4PUNEO2fpfzw4uxHwhpc6"
-	base_url = "https://api.distancematrix.ai/maps/api/distancematrix/json?"
-	complete_url = base_url + "origins=" + str(loc_cur_city.latitude) + "," + str(loc_cur_city.longitude) + "&destinations=" + str(loc_des_city.latitude) + "," + str(loc_des_city.longitude) + "&departure_time=now" + "&key=" + api_key
-	response = requests.get(complete_url)
-	xd = response.json()
-
-	if xd["status"]=="OK":
-		yd = xd["rows"]
-		ed = yd[0]["elements"]
-		dd = ed[0]["duration"]
-		dura_text = dd["text"]
-		speak("The duration for given journey is")
-		speak(dura_text)
-		print("Results : The duration for given journey is : "+dura_text)
+	locdescity = geolocator.geocode(des_city)
+	locity = (loccurcity.latitude, loccurcity.longitude)
+	ldcity = (locdescity.latitude, locdescity.longitude)
+	cal_dist = ceil(geodesic(locity, ldcity).km)
+	if cal_dist<=150:
+		caltime=cal_dist//65
+		speak("The total duration for the journey in Hours is")
+		speak(caltime)
+		speak("You should prefer driving for this journey")
+		print("Results : The total duration for the journey is - "+str(caltime)+"Hrs. and preferred mode is Driving.")
 	else:
-		speak("Not have much information")
-		print("Result : No data found")
+		caltime=cal_dist//750
+		speak("The total duration for the journey in Hours is")
+		speak(caltime)
+		speak("You should prefer air flight for this journey")
+		print("Results : The total duration for the journey is - "+str(caltime)+"Hrs. and preferred mode is Flight.")
 
 
 def airports():
@@ -222,15 +194,15 @@ def itenary():
 
 
 def emergency():
-	account_sid = 'ACae22c9ee3cb3e33f9f10182e29dd41a3'
-	auth_token = '05fab44d42ec33b37585bab31b8ef581'
+	account_sid = 'YouAPIsid'
+	auth_token = 'yourToken'
 	send_url = "http://api.ipstack.com/check?access_key=0fbd1f7d2671232974fce0727cea581a" #IPStack API
 	geo_req = requests.get(send_url)
 	geo_json = json.loads(geo_req.text)
 	tor_city = geo_json['city'].lower()
 	tor_country = geo_json['country_name'].lower()
 	tor_lat = geo_json['latitude']
-	tor_long = geo_json['longitude'].lower()
+	tor_long = geo_json['longitude']
 	tor_zip = geo_json["zip"]
 	tor_regname = geo_json["region_name"].lower()
 	speak("What kind of emergency are you in? Accident, Medical, Fire or Police")
@@ -248,8 +220,7 @@ def emergency():
 			message = client.messages .create(body=mess,from_='+12058517339',to='+917838379279')
 			print(message.sid)
 			speak("These are the nearest Fire Stations in your location")
-			wb.open_new("https://www.google.com/maps/search/Firestations/@"+tor_lat+","+tor_long)
-			playsound('C:\\Users\\Ayush\\Desktop\\devclub\\images\\alarm.mp3')
+			wb.open_new("https://www.google.com/maps/search/Firestations/@"+str(tor_lat)+","+str(tor_long))
 		elif "accident" in emer or 'medical' in emer or 'ambulance' in emer:
 			client = cl(account_sid, auth_token)
 			call = client.calls.create(
@@ -262,8 +233,7 @@ def emergency():
 			message = client.messages .create(body=mess,from_='+12058517339',to='+917838379279')
 			print(message.sid)
 			speak("These are the nearest Hospitals in your location")
-			wb.open_new("https://www.google.com/maps/search/Hospitals/@"+tor_lat+","+tor_long)
-			playsound('C:\\Users\\Ayush\\Desktop\\devclub\\images\\alarm.mp3')
+			wb.open_new("https://www.google.com/maps/search/Hospitals/@"+str(tor_lat)+","+str(tor_long))
 		elif 'police' in emer or 'theft' in emer or 'robbery' in emer or 'kidnap' in emer or 'lost' in emer:
 			client = cl(account_sid, auth_token)
 			call = client.calls.create(
@@ -276,11 +246,10 @@ def emergency():
 			message = client.messages .create(body=mess,from_='+12058517339',to='+917838379279')
 			print(message.sid)
 			speak("These are the nearest Police Stations in your location")
-			wb.open_new("https://www.google.com/maps/search/Policestations/@"+tor_lat+","+tor_long)
-			playsound('C:\\Users\\Ayush\\Desktop\\devclub\\images\\alarm.mp3')
+			wb.open_new("https://www.google.com/maps/search/Policestations/@"+str(tor_lat)+","+str(tor_long))
 		else:
 			speak("These are the nearest Police Stations in your location")
-			wb.open_new("https://www.google.com/maps/search/Policestations/@"+tor_lat+","+tor_long)
+			wb.open_new("https://www.google.com/maps/search/Policestations/@"+str(tor_lat)+","+str(tor_long))
 
 	else:
 		speak("Its seems that presently you are not in India. Dial these numbers in case of emergency while you are in India:")
@@ -291,7 +260,6 @@ def emergency():
 
 def activity():
 	speak("Please tell the City for which you want to explore the activities?")
-	t="Please tell the City for which you want to explore the activities?"
 	placename = userquery().lower()
 	geolocator = Nominatim(user_agent="jainayush362@gmail.com")
 	city = placename
@@ -317,6 +285,7 @@ class Application(tk.Frame):
 		self.master = master
 		self.pack()
 		self.create_widgets()
+		self.master.title("TourIN : The !deal Tourism App")
 
 	def createCanvas(self, canvas_width, canvas_height):
 		canvas = tk.Canvas(self.master, width=canvas_width, height=canvas_height)
@@ -328,145 +297,101 @@ class Application(tk.Frame):
 		return canvas
 
 	def create_widgets(self):
-		frame = tk.Frame(self)
-		frame.grid()
-		self.loadimage = tk.PhotoImage(file="images//acti.png")
-		self.hi_there = tk.Button(frame, image=self.loadimage, bg="white", activebackground="yellow", command=activity)
+		self.loadimage = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\acti.png")
+		self.hi_there = tk.Button(self, image=self.loadimage, bg="white", activebackground="yellow", command=activity)
 		# self.hi_there["command"] = activity()
 		self.hi_there["border"] = "2"
-		self.hi_there.grid(row=0,column=0,padx=20,pady=20)
-		self.lab = tk.Label(frame, text="Activities", font=("bold",13), anchor="s")
+		self.hi_there.grid(row=0, column=0, padx=20,pady=20)
+		self.lab = tk.Label(self, text="Activities", font=("bold",13), anchor="s")
 		self.lab.place(x=21,y=90)
 
-		self.loadimage1 = tk.PhotoImage(file="images//climate.png")
-		self.hi1_there = tk.Button(frame, image=self.loadimage1, bg="white", activebackground="yellow")
+		self.loadimage1 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\climate.png")
+		self.hi1_there = tk.Button(self, image=self.loadimage1, bg="white", activebackground="yellow")
 		self.hi1_there["command"] = climate
 		self.hi1_there["border"] = "2"
 		self.hi1_there.grid(row=0, column=1, padx=20,pady=20)
-		self.lab1 = tk.Label(frame, text="Weather", font=("bold",13), anchor="s")
+		self.lab1 = tk.Label(self, text="Weather", font=("bold",13), anchor="s")
 		self.lab1.place(x=130,y=90)
 
-		self.loadimage2 = tk.PhotoImage(file="images//poa.png")
-		self.hi2_there = tk.Button(frame, image=self.loadimage2, bg="white", activebackground="yellow")
+		self.loadimage2 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\poa.png")
+		self.hi2_there = tk.Button(self, image=self.loadimage2, bg="white", activebackground="yellow")
 		self.hi2_there["command"] = points_of_attr
 		self.hi2_there["border"] = "2"
 		self.hi2_there.grid(row=0, column=2, padx=20,pady=20)
-		self.lab2 = tk.Label(frame, text="Attractions", font=("bold",13), anchor="s")
+		self.lab2 = tk.Label(self, text="Attractions", font=("bold",13), anchor="s")
 		self.lab2.place(x=236,y=90)
 
-		self.loadimage3 = tk.PhotoImage(file="images//visa.png")
-		self.hi3_there = tk.Button(frame, image=self.loadimage3, bg="white", activebackground="yellow")
+		self.loadimage3 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\visa.png")
+		self.hi3_there = tk.Button(self, image=self.loadimage3, bg="white", activebackground="yellow")
 		self.hi3_there["command"] = visa
 		self.hi3_there["border"] = "2"
 		self.hi3_there.grid(row=0, column=3, padx=20,pady=20)
-		self.lab3 = tk.Label(frame, text="Visa", font=("bold",13), anchor="s")
+		self.lab3 = tk.Label(self, text="Visa", font=("bold",13), anchor="s")
 		self.lab3.place(x=365,y=90)
 
-		self.loadimage4 = tk.PhotoImage(file="images//india.png")
-		self.hi4_there = tk.Button(frame, image=self.loadimage4, bg="white", activebackground="yellow")
+		self.loadimage4 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\india.png")
+		self.hi4_there = tk.Button(self, image=self.loadimage4, bg="white", activebackground="yellow")
 		self.hi4_there["command"] = about_india
 		self.hi4_there["border"] = "2"
 		self.hi4_there.grid(row=0, column=4, padx=20,pady=20)
-		self.lab4 = tk.Label(frame, text="About India", font=("bold",13), anchor="s")
+		self.lab4 = tk.Label(self, text="About India", font=("bold",13), anchor="s")
 		self.lab4.place(x=450,y=90)
 
-		self.loadimage5 = tk.PhotoImage(file="images//itinerary.png")
-		self.hi5_there = tk.Button(frame, image=self.loadimage5, bg="white", activebackground="yellow")
+		self.loadimage5 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\itinerary.png")
+		self.hi5_there = tk.Button(self, image=self.loadimage5, bg="white", activebackground="yellow")
 		self.hi5_there["command"] = itenary
 		self.hi5_there["border"] = "2"
 		self.hi5_there.grid(row=0, column=5, padx=20,pady=20)
-		self.lab5 = tk.Label(frame, text="Booking", font=("bold",13), anchor="s")
+		self.lab5 = tk.Label(self, text="Booking", font=("bold",13), anchor="s")
 		self.lab5.place(x=575,y=90)
 
-		self.loadimage6 = tk.PhotoImage(file="images//identify.png")
-		self.hi6_there = tk.Button(frame, image=self.loadimage6, bg="white", activebackground="yellow")
+		self.loadimage6 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\identify.png")
+		self.hi6_there = tk.Button(self, image=self.loadimage6, bg="white", activebackground="yellow")
 		self.hi6_there["command"] = identify
 		self.hi6_there["border"] = "2"
 		self.hi6_there.grid(row=1, column=0, padx=20,pady=20)
-		self.lab6 = tk.Label(frame, text="Identify It", font=("bold",13), anchor="s")
+		self.lab6 = tk.Label(self, text="Identify It", font=("bold",13), anchor="s")
 		self.lab6.place(x=18,y=200)
 
-		self.loadimage7 = tk.PhotoImage(file="images//duration.png")
-		self.hi7_there = tk.Button(frame, image=self.loadimage7, bg="white", activebackground="yellow")
+		self.loadimage7 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\duration.png")
+		self.hi7_there = tk.Button(self, image=self.loadimage7, bg="white", activebackground="yellow")
 		self.hi7_there["command"] = duration_calc
 		self.hi7_there["border"] = "2"
 		self.hi7_there.grid(row=1, column=1, padx=20,pady=20)
-		self.lab7 = tk.Label(frame, text="Duration", font=("bold",13), anchor="s")
+		self.lab7 = tk.Label(self, text="Duration", font=("bold",13), anchor="s")
 		self.lab7.place(x=130,y=200)
 
-		self.loadimage8 = tk.PhotoImage(file="images//distance.png")
-		self.hi8_there = tk.Button(frame, image=self.loadimage8, bg="white", activebackground="yellow")
+		self.loadimage8 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\distance.png")
+		self.hi8_there = tk.Button(self, image=self.loadimage8, bg="white", activebackground="yellow")
 		self.hi8_there["command"] = distance_calc
 		self.hi8_there["border"] = "2"
 		self.hi8_there.grid(row=1, column=2, padx=20,pady=20)
-		self.lab8 = tk.Label(frame, text="Distance", font=("bold",13), anchor="s")
+		self.lab8 = tk.Label(self, text="Distance", font=("bold",13), anchor="s")
 		self.lab8.place(x=240,y=200)
 
-		self.loadimage9 = tk.PhotoImage(file="images//emergency.png")
-		self.hi9_there = tk.Button(frame, image=self.loadimage9, bg="white", activebackground="yellow")
+		self.loadimage9 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\emergency.png")
+		self.hi9_there = tk.Button(self, image=self.loadimage9, bg="white", activebackground="yellow")
 		self.hi9_there["command"] = emergency
 		self.hi9_there["border"] = "2"
 		self.hi9_there.grid(row=1, column=3, padx=20,pady=20)
-		self.lab9 = tk.Label(frame, text="Emergency", font=("bold",13), anchor="s")
+		self.lab9 = tk.Label(self, text="Emergency", font=("bold",13), anchor="s")
 		self.lab9.place(x=345,y=200)
-
-		self.loadimage10 = tk.PhotoImage(file="images//airport.png")
-		self.hi10_there = tk.Button(frame, image=self.loadimage10, bg="white", activebackground="yellow")
+		
+		self.loadimage10 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\airport.png")
+		self.hi10_there = tk.Button(self, image=self.loadimage10, bg="white", activebackground="yellow")
 		self.hi10_there["command"] = airports
 		self.hi10_there["border"] = "2"
 		self.hi10_there.grid(row=1, column=4, padx=20,pady=20)
-		self.lab10 = tk.Label(frame, text="Airports", font=("bold",13), anchor="s")
+		self.lab10 = tk.Label(self, text="Airports", font=("bold",13), anchor="s")
 		self.lab10.place(x=465,y=200)
 
-		self.loadimage11 = tk.PhotoImage(file="images//india1.png")
-		self.hi11_there = tk.Button(frame, image=self.loadimage11, bg="white", activebackground="yellow")
+		self.loadimage11 = tk.PhotoImage(file="C:\\Users\\Ayush\\Desktop\\devclub\\images\\india1.png")
+		self.hi11_there = tk.Button(self, image=self.loadimage11, bg="white", activebackground="yellow")
 		self.hi11_there["command"] = places_data
 		self.hi11_there["border"] = "2"
 		self.hi11_there.grid(row=1, column=5, padx=20,pady=20)
-
-
-		# self.lab11 = tk.Label(frame, text="Places to Visit", font=("bold",13), anchor="s")
-		# self.lab11.place(x=550,y=200)
-		#
-		label_frame = tk.Frame(self,bg="white",height=200,width=500)
-		label_frame.grid()
-
-		assist = tk.LabelFrame(label_frame,text="Assistant",bg="white",height=20,width=250)
-		assist.grid()
-
-		User1 = tk.LabelFrame(label_frame,text="User",bg="white",height=20,width=250)
-		User1.grid()
-		label1 = tk.Label(assist, text='1. This is a Label.')
-		label1.grid(row=0, column=0)
-		label1 = tk.Label(User1, text='1. This is a Label.')
-		label1.grid(row=1, column=1)
-		label1 = tk.Label(assist, text='1. This is a Label.')
-		label1.grid(row=2, column=0)
-		label1 = tk.Label(User1, text='1. This is a Label.')
-		label1.grid(row=3, column=1)
-		label1 = tk.Label(assist, text='1. This is a Label.')
-		label1.grid(row=4, column=0)
-		label1 = tk.Label(User1, text='1. This is a Label.')
-		label1.grid(row=5, column=1)
-
-		# label2 = tk.Label(User1, text='1. This is a Label.')
-		# label2.grid(row=1, column=1)
-		# self.labelBottom = tk.Label(self,height=100,width=150)
-		# self.labelBottom.grid(row=2,column=0)
-
-		# self.entryMsg = tk.Entry(self.labelBottom,
-		# 					  bg="#2C3E50",
-		# 					  fg="#EAECEE",
-		# 					  font="Helvetica 13")
-		#
-		# # place the given widget
-		# # into the gui window
-		# self.entryMsg.place(relwidth=0.74,
-		# 					relheight=0.06,
-		# 					rely=0.008,
-		# 					relx=0.011)
-
-		# self.entryMsg.focus()
+		self.lab11 = tk.Label(self, text="Places to Visit", font=("bold",13), anchor="s")
+		self.lab11.place(x=550,y=200)
 
 
 if __name__ == "__main__":
@@ -474,6 +399,6 @@ if __name__ == "__main__":
 	root = tk.Tk()
 	app = Application(master=root)
 	canvas = app.createCanvas(700, 450)
-	canvas = app.addImage(canvas,"images//backgroundimg.png", 0, 0)
+	canvas = app.addImage(canvas,"C:\\Users\\Ayush\\Desktop\\devclub\\images\\backgroundimg.png", 0, 0)
 	canvas.pack()
 	app.mainloop()
