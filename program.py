@@ -271,7 +271,7 @@ def emergency():
 
 def activity():
 	speak("Please tell the City for which you want to explore the activities?")
-	placename = "delhi"#userquery().lower()
+	placename = userquery().lower()
 	geolocator = Nominatim(user_agent="jainayush362@gmail.com")
 	city = placename
 	country ="India"
