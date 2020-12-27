@@ -117,7 +117,9 @@ def distance_calc():
 	caldist = ceil(geodesic(ocity, dcity).km)
 	speak("The Calculated Distance in Kilometers is : ")
 	speak(caldist)
-	print("Results : The Calculated Distance is : "+str(caldist)+" Km")
+	tkinter.messagebox.showinfo('Calculated Distance (in Km)',caldist)
+	#print("Results : The Calculated Distance is : "+str(caldist)+" Km")
+
 
 
 def duration_calc():
@@ -139,13 +141,17 @@ def duration_calc():
 		speak("The total duration for the journey in Hours is")
 		speak(caltime)
 		speak("You should prefer driving for this journey")
-		print("Results : The total duration for the journey is - "+str(caltime)+"Hrs. and preferred mode is Driving.")
+		rest = "The total duration for the journey in Hours is "+str(caltime)+".You should prefer driving for this journey"
+		tkinter.messagebox.showinfo('Calculated Duration (in Hr)',rest)
+		#print("Results : The total duration for the journey is - "+str(caltime)+"Hrs. and preferred mode is Driving.")
 	else:
 		caltime=cal_dist//750
 		speak("The total duration for the journey in Hours is")
 		speak(caltime)
 		speak("You should prefer air flight for this journey")
-		print("Results : The total duration for the journey is - "+str(caltime)+"Hrs. and preferred mode is Flight.")
+		rest = "The total duration for the journey in Hours is "+str(caltime)+".You should prefer flight for this journey"
+		tkinter.messagebox.showinfo('Calculated Duration (in Hr)',rest)
+		#print("Results : The total duration for the journey is - "+str(caltime)+"Hrs. and preferred mode is Flight.")
 
 
 def airports():
@@ -163,19 +169,24 @@ def places_data():
 	month = datetime.datetime.now().month
 	if month in [12, 1]:
 		speak("During winter season it is best to visit Kerala, Chennai, Jaipur, Udaipur, Jodhpur, Karnataka, Uttarakhand, Gujarat, Maharashtra, Lakshadweep, Goa, Delhi, Kashmir, Mussoorie, Agra, Varanasi, Lucknow")
-		print("Results : During winter season it is best to visit Kerala, Chennai, Jaipur, Udaipur, Jodhpur, Karnataka, Uttarakhand, Gujarat, Maharashtra, Lakshadweep, Goa, Delhi, Kashmir, Mussoorie, Agra, Varanasi, Lucknow")
+		tkinter.messagebox.showinfo('Places Data',"During winter season it is best to visit Kerala, Chennai, Jaipur, Udaipur, Jodhpur, Karnataka, Uttarakhand, Gujarat, Maharashtra, Lakshadweep, Goa, Delhi, Kashmir, Mussoorie, Agra, Varanasi, Lucknow")
+		#print("Results : During winter season it is best to visit Kerala, Chennai, Jaipur, Udaipur, Jodhpur, Karnataka, Uttarakhand, Gujarat, Maharashtra, Lakshadweep, Goa, Delhi, Kashmir, Mussoorie, Agra, Varanasi, Lucknow")
 	elif month in [2, 3]:
 		speak("During Spring season its best to visit Ooty, Kashmir, Nagaland, Andaman and Nicobar Islands, Kasol, Hampi, Kerela, Goa and Darjeeling.")
-		print("Results : During Spring season its best to visit Ooty, Kashmir, Nagaland, Andaman and Nicobar Islands, Kasol, Hampi, Kerela, Goa and Darjeeling.")
+		tkinter.messagebox.showinfo('Places Data',"During Spring season its best to visit Ooty, Kashmir, Nagaland, Andaman and Nicobar Islands, Kasol, Hampi, Kerela, Goa and Darjeeling.")
+		#print("Results : During Spring season its best to visit Ooty, Kashmir, Nagaland, Andaman and Nicobar Islands, Kasol, Hampi, Kerela, Goa and Darjeeling.")
 	elif month in [4, 5, 6]:
 		speak("During summer season it is best to visit Shimla, Manali, Andaman and Nicobar, Darjeeling, Rishikesh, Shilong, Laksdweep, Ooty, Gangtok, Ladakh, Dalhousie, Nanital, Uttrakhand")
-		print("Results : During summer season it is best to visit Shimla, Manali, Andaman and Nicobar, Darjeeling, Rishikesh, Shilong, Laksdweep, Ooty, Gangtok, Ladakh, Dalhousie, Nanital, Uttrakhand")
+		tkinter.messagebox.showinfo('Places Data',"During summer season it is best to visit Shimla, Manali, Andaman and Nicobar, Darjeeling, Rishikesh, Shilong, Laksdweep, Ooty, Gangtok, Ladakh, Dalhousie, Nanital, Uttrakhand")
+		#print("Results : During summer season it is best to visit Shimla, Manali, Andaman and Nicobar, Darjeeling, Rishikesh, Shilong, Laksdweep, Ooty, Gangtok, Ladakh, Dalhousie, Nanital, Uttrakhand")
 	elif month in [7, 8, 9]:
 		speak("During monsoon season it is best to visit Kashmir, Jaisalmer, Pondicherry, Kinnaur, Meghalaya, Jaipur, Gujrat, Mysore, Uttrakhand, Jodhpur, Ladakh, Agra, Varanasi, Lucknow, Delhi")
-		print("Results : During mmonsoon season it is best to visit Kashmir, Jaisalmer, Pondicherry, Kinnaur, Meghalaya, Jaipur, Gujrat, Mysore, Uttrakhand, Jodhpur, Ladakh, Agra, Varanasi, Lucknow, Delhi")
+		tkinter.messagebox.showinfo('Places Data',"During monsoon season it is best to visit Kashmir, Jaisalmer, Pondicherry, Kinnaur, Meghalaya, Jaipur, Gujrat, Mysore, Uttrakhand, Jodhpur, Ladakh, Agra, Varanasi, Lucknow, Delhi")
+		#print("Results : During mmonsoon season it is best to visit Kashmir, Jaisalmer, Pondicherry, Kinnaur, Meghalaya, Jaipur, Gujrat, Mysore, Uttrakhand, Jodhpur, Ladakh, Agra, Varanasi, Lucknow, Delhi")
 	else:
 		speak("During Autumn season you must visit to Kashmir, Kerala, Mysore, Gujarat, Uttarakhand , Kolkata, Darjeeling, Pushkar, Ladakh to see the dazzling fall colour.")
-		print("Results : During Autumn season you must visit to Kashmir, Kerala, Mysore, Gujarat, Uttarakhand , Kolkata, Darjeeling, Pushkar, Ladakh to see the dazzling fall colour.")
+		tkinter.messagebox.showinfo('Places Data',"During Autumn season you must visit to Kashmir, Kerala, Mysore, Gujarat, Uttarakhand , Kolkata, Darjeeling, Pushkar, Ladakh to see the dazzling fall colour.")
+		#print("Results : During Autumn season you must visit to Kashmir, Kerala, Mysore, Gujarat, Uttarakhand , Kolkata, Darjeeling, Pushkar, Ladakh to see the dazzling fall colour.")
 
 
 def points_of_attr():
@@ -194,8 +205,8 @@ def itenary():
 
 
 def emergency():
-	account_sid = 'YouAPIsid'
-	auth_token = 'yourToken'
+	account_sid = 'key'
+	auth_token = 'token'
 	send_url = "http://api.ipstack.com/check?access_key=0fbd1f7d2671232974fce0727cea581a" #IPStack API
 	geo_req = requests.get(send_url)
 	geo_json = json.loads(geo_req.text)
@@ -260,19 +271,28 @@ def emergency():
 
 def activity():
 	speak("Please tell the City for which you want to explore the activities?")
-	placename = userquery().lower()
+	placename = "delhi"#userquery().lower()
 	geolocator = Nominatim(user_agent="jainayush362@gmail.com")
 	city = placename
 	country ="India"
 	loca = geolocator.geocode(city+','+ country)
-	#print("latitude is :-" ,loc.latitude,"\nlongtitude is:-" ,loc.longitude)
 
 	amadeus = Client(client_id='Aq3qAwphK1SyDHjYnlABOc12OO2AHG82',client_secret='6h5fmOnNwCSSHfAd')
 	try:
 		response = amadeus.shopping.activities.get(latitude=loca.latitude, longitude=loca.longitude)
+		xd = response.result
+		ite = xd["meta"]
+		num = ite["count"]
+		sd = xd["data"]
+
 		speak("Following are the Activities for given location"+placename)
-		tkinter.messagebox.showinfo('Result for Query',response.data)
-		print(response.data)
+		for i in range(0, int(num)):
+			nd = sd[i]["name"]
+			bd = sd[i]["bookingLink"]
+			res = str(i)+". "+"Name: "+str(nd)+ ", Booking: " + str(bd)
+			speak(nd)
+			print(res+"\n")
+
 	except ResponseError as error:
 		print(error)
 
