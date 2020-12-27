@@ -423,22 +423,34 @@ class Application(tk.Frame):
 		self.hi11_there["command"] = places_data
 		self.hi11_there["border"] = "2"
 		self.hi11_there.grid(row=1, column=5, padx=20,pady=20)
+
+
 		# self.lab11 = tk.Label(frame, text="Places to Visit", font=("bold",13), anchor="s")
 		# self.lab11.place(x=550,y=200)
 		#
-		# label_frame = tk.LabelFrame(self, text='This is Label Frame',bg="white",height=50,width=500,fg="black")
-		# label_frame.grid(row=2,column=1)
-		#
-		# label1 = tk.Label(label_frame, text='1. This is a Label.')
-		# label1.place(x=0, y=5)
-		#
-		# label2 = tk.Label(label_frame, text='2. This is another Label.')
-		# label2.place(x=0, y=35)
-		#
-		# label3 = tk.Label(label_frame,
-		# 			   text='3. We can add multiple\n    widgets in it.')
-		#
-		# label3.place(x=0, y=65)
+		label_frame = tk.Frame(self,bg="white",height=200,width=500)
+		label_frame.grid()
+
+		assist = tk.LabelFrame(label_frame,text="Assistant",bg="white",height=20,width=250)
+		assist.grid()
+
+		User1 = tk.LabelFrame(label_frame,text="User",bg="white",height=20,width=250)
+		User1.grid()
+		label1 = tk.Label(assist, text='1. This is a Label.')
+		label1.grid(row=0, column=0)
+		label1 = tk.Label(User1, text='1. This is a Label.')
+		label1.grid(row=1, column=1)
+		label1 = tk.Label(assist, text='1. This is a Label.')
+		label1.grid(row=2, column=0)
+		label1 = tk.Label(User1, text='1. This is a Label.')
+		label1.grid(row=3, column=1)
+		label1 = tk.Label(assist, text='1. This is a Label.')
+		label1.grid(row=4, column=0)
+		label1 = tk.Label(User1, text='1. This is a Label.')
+		label1.grid(row=5, column=1)
+
+		# label2 = tk.Label(User1, text='1. This is a Label.')
+		# label2.grid(row=1, column=1)
 		# self.labelBottom = tk.Label(self,height=100,width=150)
 		# self.labelBottom.grid(row=2,column=0)
 
